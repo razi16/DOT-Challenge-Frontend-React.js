@@ -5,7 +5,11 @@ import he from "he";
 function Play() {
   const [login, setLogin] = useState(false);
   const [score, setScore] = useState(0);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(() => {
+    const saved = localStorage.getItem("timer");
+    const initalValue = JSON.parse(saved);
+    return initalValue || 30;
+  });
   const [questions, setQuestions] = useState([]);
   const [play, setPlay] = useState(false);
   const [questionCount, setQuestionCount] = useState(() => {
@@ -118,6 +122,7 @@ function Play() {
     if (questions.length > 0) {
       const timerId = setInterval(() => {
         setTimer((prevState) => prevState - 1);
+        localStorage.setItem("timer", timer);
         if (timer === 0) {
           setQuestionCount(10);
         }
@@ -158,7 +163,6 @@ function Play() {
                 <div className="answers-container">
                   <p className="answer" onClick={correctAnswer}>
                     {he.decode(questions[questionCount].correct_answer)}
-                    (correct)
                   </p>
 
                   <p className="answer" onClick={answer}>
@@ -181,7 +185,6 @@ function Play() {
 
                   <p className="answer" onClick={correctAnswer}>
                     {he.decode(questions[questionCount].correct_answer)}
-                    (correct)
                   </p>
 
                   <p className="answer" onClick={answer}>
@@ -204,7 +207,6 @@ function Play() {
 
                   <p className="answer" onClick={correctAnswer}>
                     {he.decode(questions[questionCount].correct_answer)}
-                    (correct)
                   </p>
 
                   <p className="answer" onClick={answer}>
@@ -227,7 +229,6 @@ function Play() {
 
                   <p className="answer" onClick={correctAnswer}>
                     {he.decode(questions[questionCount].correct_answer)}
-                    (correct)
                   </p>
                 </div>
               )
