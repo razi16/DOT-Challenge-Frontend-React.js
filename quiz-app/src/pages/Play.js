@@ -5,7 +5,7 @@ import he from "he";
 function Play() {
   const [login, setLogin] = useState(false);
   const [score, setScore] = useState(0);
-  const [timer, setTimer] = useState(5);
+  const [timer, setTimer] = useState(30);
   const [questions, setQuestions] = useState([]);
   const [play, setPlay] = useState(false);
   const [questionCount, setQuestionCount] = useState(() => {
@@ -20,6 +20,7 @@ function Play() {
 
   const playNow = () => {
     setPlay(true);
+    setTimer(30);
     setScore(0);
     setResults({ answered: 0, correct: 0 });
     setQuestionCount(0);
@@ -102,7 +103,6 @@ function Play() {
 
   useEffect(() => {
     setCorrectAnswerRandomizer(Math.floor(Math.random() * 4));
-    setTimer(5);
 
     localStorage.setItem("questionCount", questionCount);
 
@@ -119,8 +119,7 @@ function Play() {
       const timerId = setInterval(() => {
         setTimer((prevState) => prevState - 1);
         if (timer === 0) {
-          setQuestionCount((prevState) => prevState + 1);
-          setTimer(5);
+          setQuestionCount(10);
         }
       }, 1000);
       return () => clearInterval(timerId);
