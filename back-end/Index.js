@@ -22,7 +22,7 @@ const verifyJWT = (req, res, next) => {
       message: "Incorrect token given",
     });
   } else {
-    jwt.verify(token, "secret", (err, decoded) => {
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
       if (err) {
         res.json({
           isLoggedIn: false,
@@ -79,15 +79,20 @@ app.post("/login", async (req, res) => {
         id: checkUser._id,
         username: checkUser.username,
       };
-      jwt.sign(payload, "secret", { expiresIn: 86400 }, (err, token) => {
-        if (err) {
-          res.json({
-            message: err,
-          });
-        } else {
-          res.json({ message: "Success", token: "Bearer " + token });
+      jwt.sign(
+        payload,
+        process.env.SECRET,
+        { expiresIn: 86400 },
+        (err, token) => {
+          if (err) {
+            res.json({
+              message: err,
+            });
+          } else {
+            res.json({ message: "Success", token: "Bearer " + token });
+          }
         }
-      });
+      );
     }
   }
 });
